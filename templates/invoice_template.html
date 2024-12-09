@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .invoice-box { max-width: 800px; margin: auto; padding: 30px; }
+        h2 { text-align: center; }
+        p { margin-bottom: 8px; }
+        table { width: 100%; margin: 10px 0; }
+        .btn-pdf {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+            width: 200px;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <h2>Invoice</h2>
+        <p><strong>Invoice Number:</strong> {{ invoice.invoice_number }}</p>
+        <p><strong>Recipient Name:</strong> {{ invoice.recipient_name }}</p>
+        <p><strong>Description:</strong> {{ invoice.description }}</p>
+        <p><strong>Amount:</strong> ${{ invoice.amount }}</p>
+        <p><strong>Issued Date:</strong> {{ invoice.issued_date }}</p>
+        <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="generate_pdf" value="true">
+            <button type="submit" class="btn-pdf">Download as PDF</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+services:
+  invoice_service:
+    container_name: invoice_service
+    image: invoice_service
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.dev
+    restart: on-failure
+    env_file: 
+      - .env
+    ports:
+      - 8008:8000
+    environment:
+      - LAUNCH_TYPE=webserver
+      - DB_HOST=postgres_db
+      - DB_USER=invoice_user
+      - DB_PASSWORD=securepassword123
+      - DB_DATABASE=invoice_db
+      - DB_PORT=5432
+    volumes:
+      - .:/usr/src/app
+    command: >
+      bash -c "
+        python manage.py makemigrations && \
+        python manage.py migrate && \
+        python manage.py collectstatic --noinput && \
+        gunicorn invoice_service.wsgi:application -w 2 -b 0.0.0.0:8000 --reload"
+    networks:
+      - imanzi_network
+    healthcheck:
+      test: ["CMD", "gunicorn", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: invoice_user
+      POSTGRES_PASSWORD: securepassword123
+      POSTGRES_DB: invoice_db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - imanzi_network
+
+networks:
+  imanzi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,26 @@
+FROM python:3.11.6
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Install Python and Package Libraries
+RUN apt-get update && apt-get install -y libpq-dev gcc postgresql-client \
+    python3-dev musl-dev
+
+# Install dependencies
+COPY ./requirements*.txt ./
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Install gunicorn explicitly (if missing)
+RUN pip install gunicorn
+
+# Copy project
+COPY . .
+
+# Collect static files (if necessary)
+RUN python manage.py collectstatic --noinput
+
+CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "invoice_service.wsgi:application"]
