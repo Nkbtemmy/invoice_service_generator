@@ -25,8 +25,8 @@ Ensure you have the following installed on your system:
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repository-url>
-cd <project-directory>
+git clone https://github.com/Nkbtemmy/invoice_service_generator
+cd invoice_service_generator
 ```
 
 ### 2. Create and Activate a Virtual Environment
@@ -128,4 +128,4 @@ Feel free to submit issues and pull requests for improvements or new features.
 ---
 
 ## Contact
-For questions or feedback, please reach out to **[Your Name]** at **your-email@example.com**.
+For questions or feedback, please reach out to **LinkedIn** at **https://www.linkedin.com/in/emmanuel-nkubito/**.
